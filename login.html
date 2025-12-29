@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ravion - Giriş Yap</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap");
+
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #0f0f10; /* Koyu Zemin */
+        font-family: "Poppins", sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        color: white;
+      }
+
+      .container {
+        background-color: #18181b;
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.1); /* Hafif Gold Işık */
+        width: 350px;
+        text-align: center;
+        border: 1px solid #333;
+      }
+
+      h1 {
+        color: #ffd700; /* Ravion Gold */
+        margin-bottom: 10px;
+      }
+
+      .toggle-btn {
+        background: none;
+        border: none;
+        color: #777;
+        font-size: 16px;
+        cursor: pointer;
+        margin: 0 10px;
+        padding-bottom: 5px;
+        transition: 0.3s;
+      }
+
+      .toggle-btn.active {
+        color: #ffd700;
+        border-bottom: 2px solid #ffd700;
+      }
+
+      input {
+        width: 100%;
+        padding: 12px;
+        margin: 10px 0;
+        background-color: #27272a;
+        border: 1px solid #333;
+        color: white;
+        border-radius: 8px;
+        outline: none;
+      }
+
+      input:focus {
+        border-color: #ffd700;
+      }
+
+      button.submit-btn {
+        width: 100%;
+        padding: 12px;
+        background-color: #ffd700;
+        color: black;
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-top: 20px;
+        transition: 0.3s;
+      }
+
+      button.submit-btn:hover {
+        background-color: #e6c200;
+        transform: scale(1.02);
+      }
+
+      .form-box {
+        display: none;
+      }
+      .form-box.active {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>RAVION</h1>
+      <br />
+
+      <div>
+        <button class="toggle-btn active" onclick="goster('giris')">
+          Giriş Yap
+        </button>
+        <button class="toggle-btn" onclick="goster('kayit')">Yeni Kayıt</button>
+      </div>
+      <br />
+
+      <div id="giris-form" class="form-box active">
+        <form action="/login" method="POST">
+          <input
+            type="email"
+            name="email"
+            placeholder="E-Posta Adresi"
+            required
+          />
+          <input type="password" name="password" placeholder="Şifre" required />
+          <button type="submit" class="submit-btn">GİRİŞ YAP</button>
+        </form>
+      </div>
+
+      <div id="kayit-form" class="form-box">
+        <form action="/register" method="POST">
+          <input
+            type="email"
+            name="email"
+            placeholder="E-Posta Adresi"
+            required
+          />
+          <input
+            type="tel"
+            name="phone"
+            placeholder="Telefon Numarası"
+            required
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Şifre Belirle"
+            required
+          />
+          <button type="submit" class="submit-btn">KAYIT OL</button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      function goster(tip) {
+        // Butonların rengini ayarla
+        document
+          .querySelectorAll(".toggle-btn")
+          .forEach((btn) => btn.classList.remove("active"));
+        event.target.classList.add("active");
+
+        // Formları gizle/aç
+        document.getElementById("giris-form").classList.remove("active");
+        document.getElementById("kayit-form").classList.remove("active");
+
+        if (tip === "giris") {
+          document.getElementById("giris-form").classList.add("active");
+        } else {
+          document.getElementById("kayit-form").classList.add("active");
+        }
+      }
+    </script>
+  </body>
+</html>

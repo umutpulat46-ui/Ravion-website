@@ -1,0 +1,650 @@
+/* --- GENEL AYARLAR --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #111; /* Koyu Arka Plan */
+    color: #fff;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* --- ORTAK SINIFLAR --- */
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.section {
+    padding: 80px 0;
+}
+
+.text-gold { color: #D4AF37; }
+.bg-gold { background-color: #D4AF37; }
+
+.divider {
+    height: 2px;
+    width: 60px;
+    background-color: #D4AF37;
+    margin: 15px 0;
+}
+
+/* --- BUTONLAR --- */
+.btn-gold, .btn-outline, .btn-solid, .btn-pay {
+    display: inline-block;
+    padding: 12px 30px;
+    border-radius: 30px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 2px solid #D4AF37;
+    cursor: pointer;
+    text-align: center;
+}
+
+.btn-gold {
+    background-color: #D4AF37;
+    color: #111;
+}
+
+.btn-gold:hover {
+    background-color: transparent;
+    color: #D4AF37;
+}
+
+.btn-outline {
+    background-color: transparent;
+    color: #D4AF37;
+}
+
+.btn-outline:hover {
+    background-color: #D4AF37;
+    color: #111;
+}
+
+.btn-solid {
+    background-color: #D4AF37; /* Altın Rengi */
+    color: #111; /* Siyah Yazı */
+    border: none;
+    width: 100%;
+    padding: 15px;
+    font-size: 1.1rem;
+    margin-top: 20px;
+}
+
+.btn-solid:hover {
+    background-color: #c09f32; /* Biraz daha koyu altın */
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+}
+
+.btn-pay {
+    background-color: #D4AF37;
+    color: #111;
+    border: none;
+    width: 100%;
+    padding: 15px;
+    font-size: 1.1rem;
+    margin-top: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-pay:hover {
+    background-color: #c09f32;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+}
+
+.btn-nav-action {
+    background-color: #D4AF37;
+    color: #111 !important;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-nav-action:hover {
+    background-color: #c09f32;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(212, 175, 55, 0.3);
+}
+
+.full-width { width: 100%; }
+
+/* --- NAVBAR --- */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+    position: absolute;
+    width: 100%;
+    top: 0;
+    z-index: 100;
+}
+
+.relative-nav {
+    position: relative;
+    background-color: #111;
+    padding: 20px 0;
+}
+
+.nav-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: #fff;
+}
+
+.gold-dot { color: #D4AF37; }
+
+.nav-links {
+    list-style: none;
+    display: flex;
+}
+
+.nav-links li { margin-left: 30px; }
+
+.nav-links a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover, .active-link { color: #D4AF37; }
+
+.hamburger {
+    display: none;
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: #fff;
+}
+
+/* --- MOBİL MENÜ (Responsive) --- */
+@media (max-width: 768px) {
+    .nav-links {
+        position: absolute;
+        top: 70px;
+        left: 0;
+        width: 100%;
+        background-color: #111;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px 0;
+        display: none; /* Başlangıçta gizli */
+        z-index: 99;
+    }
+
+    .nav-links.active { display: flex; /* JS ile açılınca görünür */ }
+    .nav-links li { margin: 15px 0; }
+    .hamburger { display: block; /* Mobilde göster */ }
+}
+
+/* --- HERO SECTION --- */
+.hero {
+    height: 100vh;
+    background: url('https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80') no-repeat center center/cover;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.7); /* Koyu filtre */
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    width: 90%;
+    max-width: 800px;
+    margin: 0 auto;
+    color: #fff;
+}
+
+.tagline {
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: #D4AF37;
+}
+
+.hero-content h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 4rem;
+    font-weight: 900;
+    line-height: 1.1;
+    margin: 20px 0;
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+    max-width: 600px;
+}
+
+.hero-btns { display: flex; gap: 20px; }
+
+/* --- HİZMETLER & PAKETLER (Grid Yapısı) --- */
+.section-header h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 50px;
+}
+
+/* --- HİZMET KARTLARI --- */
+.service-card {
+    background-color: #1a1a1a;
+    padding: 40px;
+    border-radius: 15px;
+    text-align: center;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.service-card:hover {
+    transform: translateY(-10px);
+    border-color: #D4AF37;
+}
+
+.icon-gold {
+    font-size: 3rem;
+    color: #D4AF37;
+    margin-bottom: 20px;
+}
+
+.service-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+}
+
+/* --- FİYAT KARTLARI (Paketler) --- */
+.pricing-card {
+    background-color: #1a1a1a;
+    padding: 40px;
+    border-radius: 15px;
+    text-align: center;
+    border: 2px solid #333;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.pricing-card:hover { border-color: #D4AF37; }
+
+.pricing-card.featured {
+    border-color: #D4AF37;
+    transform: scale(1.05);
+    z-index: 10;
+    box-shadow: 0 10px 30px rgba(212, 175, 55, 0.2);
+}
+
+.badge {
+    position: absolute;
+    top: 20px; right: -35px;
+    background-color: #D4AF37;
+    color: #111;
+    padding: 5px 40px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    transform: rotate(45deg);
+}
+
+.pricing-card h3 { font-size: 1.8rem; margin-bottom: 20px; }
+
+.price {
+    font-size: 3rem;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    margin-bottom: 30px;
+}
+
+.features {
+    list-style: none;
+    text-align: left;
+    margin-bottom: 30px;
+}
+
+.features li {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.features li i { color: #D4AF37; margin-right: 10px; }
+
+/* --- LOGIN PAGE STYLES --- */
+.login-page-body {
+    background-color: #0a0a0a;
+    min-height: 100vh;
+}
+
+.back-link {
+    text-decoration: none;
+    color: #888;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.back-link:hover { color: #D4AF37; }
+
+.portal-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 80px); /* Navbar yüksekliğini çıkar */
+    padding: 30px 0;
+}
+
+.portal-container {
+    background-color: #111;
+    padding: 40px; /* BOŞLUK AZALTILDI */
+    border-radius: 20px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    border: 1px solid #222;
+}
+
+.portal-header {
+    text-align: center;
+    margin-bottom: 30px; /* BOŞLUK AZALTILDI */
+}
+
+.portal-header h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.toggle-btns {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.toggle-btn {
+    background: none;
+    border: none;
+    color: #666;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding-bottom: 5px;
+    border-bottom: 2px solid transparent;
+}
+
+.toggle-btn.active {
+    color: #D4AF37;
+    border-bottom-color: #D4AF37;
+}
+
+/* Form Animasyonları */
+.portal-form-wrapper {
+    position: relative;
+    overflow: hidden;
+}
+
+.active-form {
+    animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Input Alanları (Kayan Yazı Efekti) */
+.input-group {
+    position: relative;
+    margin-bottom: 25px;
+    border-bottom: 2px solid #333;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px 5px;
+    background: none;
+    border: none;
+    outline: none;
+    color: #fff;
+    font-size: 1rem;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Placeholder Rengi */
+.input-group input::placeholder {
+    color: #666;
+    opacity: 1; /* Firefox için */
+}
+
+.input-group label {
+    position: absolute;
+    top: 50%;
+    left: 5px;
+    transform: translateY(-50%);
+    color: #666;
+    font-size: 1rem;
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+/* Kayan Efekt Tetikleyicileri (Giriş Formu İçin) */
+.input-group input:focus ~ label,
+.input-group input:valid ~ label {
+    top: -10px;
+    font-size: 0.85rem;
+    color: #D4AF37;
+}
+
+/* Kayıt Formu İçin Özel Kural: Placeholder Varsa Etiket Hep Yukarıda */
+.input-group input:not(:placeholder-shown) ~ label {
+    top: -10px;
+    font-size: 0.85rem;
+    color: #D4AF37;
+}
+
+
+.input-icon {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #D4AF37;
+}
+
+.form-actions {
+    text-align: right;
+    margin-bottom: 20px;
+}
+
+.form-actions a, .form-footer a {
+    color: #888;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+}
+
+.form-actions a:hover, .form-footer a:hover { color: #D4AF37; }
+
+.form-footer {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* --- PAYMENT PAGE STYLES --- */
+.payment-body {
+    background-color: #0a0a0a;
+    min-height: 100vh;
+}
+
+.secure-badge {
+    color: #4caf50;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.payment-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 80px);
+    padding: 30px;
+}
+
+.payment-container {
+    display: flex;
+    background-color: #111;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    width: 100%;
+    max-width: 900px;
+    border: 1px solid #222;
+}
+
+.order-summary {
+    background-color: #1a1a1a;
+    padding: 40px;
+    width: 40%;
+    border-right: 1px solid #222;
+}
+
+.order-summary h3 {
+    font-family: 'Montserrat', sans-serif;
+    margin-bottom: 30px;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    font-size: 0.95rem;
+}
+
+.summary-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-top: 20px;
+}
+
+.total-price {
+    color: #D4AF37;
+    font-size: 1.8rem;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.back-link-small {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #666;
+    text-decoration: none;
+    font-size: 0.9rem;
+    margin-top: 30px;
+    transition: color 0.3s ease;
+}
+
+.back-link-small:hover { color: #D4AF37; }
+
+/* Ödeme Formu (Sağ Taraf) */
+.payment-form {
+    padding: 40px;
+    width: 60%;
+}
+
+.payment-form h2 {
+    font-family: 'Montserrat', sans-serif;
+    margin-bottom: 20px;
+}
+
+.card-icons {
+    font-size: 2rem;
+    color: #fff;
+    margin-bottom: 30px;
+    display: flex;
+    gap: 15px;
+}
+
+/* Ödeme Sayfası İçin Label Düzenlemesi */
+.payment-form label {
+    position: static; /* Kayan yazı efektini iptal et */
+    display: block;
+    color: #888;
+    margin-bottom: 8px;
+    font-size: 0.85rem;
+    pointer-events: auto;
+    transform: none;
+}
+
+.row {
+    display: flex;
+    gap: 20px;
+}
+
+.row .input-group { flex: 1; }
+
+.secure-note {
+    text-align: center;
+    font-size: 0.85rem;
+    color: #666;
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+/* --- FOOTER --- */
+footer {
+    background-color: #111;
+    text-align: center;
+    padding: 30px 0;
+    margin-top: 50px;
+    border-top: 1px solid #222;
+    color: #666;
+}
+/* Kayıt formundaki yazıları yukarı sabitle */
+#register-form .input-group label {
+    top: -10px !important;
+    font-size: 0.85rem !important;
+    color: #D4AF37 !important;
+}

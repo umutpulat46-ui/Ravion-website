@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Güvenli Ödeme | AGENCY</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Poppins:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
+  <body class="payment-body">
+    <nav class="navbar relative-nav">
+      <div class="container nav-flex">
+        <div class="logo">AGENCY<span class="gold-dot">.</span></div>
+        <div class="secure-badge">
+          <i class="fas fa-lock"></i> 256-Bit SSL Secured
+        </div>
+      </div>
+    </nav>
+
+    <div class="payment-wrapper">
+      <div class="payment-container">
+        <div class="order-summary">
+          <h3>Sipariş Özeti</h3>
+          <div class="summary-item">
+            <span>Seçilen Paket</span>
+            <span id="plan-name" class="text-gold">PREMIUM PLAN</span>
+          </div>
+          <div class="summary-item">
+            <span>Hizmet Bedeli</span>
+            <span id="plan-price">₺15.000</span>
+          </div>
+          <div class="summary-item">
+            <span>KDV (%20)</span>
+            <span id="plan-tax">₺3.000</span>
+          </div>
+          <div class="divider"></div>
+          <div class="summary-total">
+            <span>TOPLAM</span>
+            <span id="plan-total" class="total-price">₺18.000</span>
+          </div>
+
+          <a href="index.html#packages" class="back-link-small">
+            <i class="fas fa-arrow-left"></i> Paketi Değiştir
+          </a>
+        </div>
+
+        <div class="payment-form">
+          <h2>Ödeme Bilgileri</h2>
+          <div class="card-icons">
+            <i class="fab fa-cc-visa"></i>
+            <i class="fab fa-cc-mastercard"></i>
+            <i class="fab fa-cc-amex"></i>
+          </div>
+
+          <form action="/odeme-yap" method="POST">
+            <div class="input-group">
+              <label>Kart Üzerindeki İsim</label>
+              <input
+                type="text"
+                name="card_name"
+                placeholder="Ad Soyad"
+                required
+              />
+            </div>
+
+            <div class="input-group">
+              <label>Kart Numarası</label>
+              <input
+                type="text"
+                name="card_number"
+                placeholder="0000 0000 0000 0000"
+                maxlength="19"
+                required
+              />
+              <i class="fas fa-credit-card input-icon"></i>
+            </div>
+
+            <div class="row">
+              <div class="input-group">
+                <label>Son Kul. Tarihi</label>
+                <input
+                  type="text"
+                  name="expiry"
+                  placeholder="AA/YY"
+                  maxlength="5"
+                  required
+                />
+              </div>
+              <div class="input-group">
+                <label>CVC / CVV</label>
+                <input
+                  type="text"
+                  name="cvc"
+                  placeholder="123"
+                  maxlength="3"
+                  required
+                />
+                <i
+                  class="fas fa-question-circle input-icon"
+                  title="Kartın arkasındaki 3 hane"
+                ></i>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-pay">
+              GÜVENLİ ÖDE <i class="fas fa-chevron-right"></i>
+            </button>
+
+            <p class="secure-note">
+              <i class="fas fa-shield-alt"></i> Ödemeniz 3D Secure ile
+              korunmaktadır.
+            </p>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
