@@ -1,170 +1,84 @@
 <!DOCTYPE html>
-<html lang="tr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ravion - Giriş Yap</title>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
-    <style>
-      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap");
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo.png') }}">
+    <title>Ravion | Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        ravion: {
+                            bg: '#020617',
+                            card: '#0F172A',
+                            primary: '#8B5CF6',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-ravion-bg text-white h-screen flex items-center justify-center font-sans">
 
-      body {
-        margin: 0;
-        padding: 0;
-        background-color: #0f0f10; /* Koyu Zemin */
-        font-family: "Poppins", sans-serif;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        color: white;
-      }
+    <div class="w-full max-w-md p-8 rounded-2xl bg-ravion-card border border-white/5 shadow-2xl relative overflow-hidden">
+        <!-- Glow Effect -->
+        <div class="absolute top-0 w-full h-1 bg-gradient-to-r from-purple-500 to-blue-500"></div>
 
-      .container {
-        background-color: #18181b;
-        padding: 40px;
-        border-radius: 20px;
-        box-shadow: 0 0 20px rgba(255, 215, 0, 0.1); /* Hafif Gold Işık */
-        width: 350px;
-        text-align: center;
-        border: 1px solid #333;
-      }
+        <div class="text-center mb-10">
+            <h1 class="text-3xl font-bold font-display tracking-tighter mb-2">
+                RAVION <span class="text-blue-500">DIGITAL</span>
+            </h1>
+            <p class="text-gray-400 text-sm">Authorized Personnel Only</p>
+        </div>
 
-      h1 {
-        color: #ffd700; /* Ravion Gold */
-        margin-bottom: 10px;
-      }
+        <!-- FIXED FORM ACTION: Points to /login route -->
+        <form action="/login" method="POST" class="space-y-6">
+            <div>
+                <label class="block text-xs font-medium text-gray-400 mb-2 uppercase tracking-wider">Username</label>
+                <div class="relative">
+                    <input type="text" name="username" id="username" 
+                        class="w-full bg-white/5 border border-white/10 rounded-lg py-3 px-4 text-white placeholder-gray-600 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all"
+                        placeholder="Enter username..." required>
+                    <i class="fas fa-user absolute right-4 top-3.5 text-gray-500"></i>
+                </div>
+            </div>
 
-      .toggle-btn {
-        background: none;
-        border: none;
-        color: #777;
-        font-size: 16px;
-        cursor: pointer;
-        margin: 0 10px;
-        padding-bottom: 5px;
-        transition: 0.3s;
-      }
+            <div>
+                <label class="block text-xs font-medium text-gray-400 mb-2 uppercase tracking-wider">Access Key</label>
+                <div class="relative">
+                    <input type="password" name="password" id="password" 
+                        class="w-full bg-white/5 border border-white/10 rounded-lg py-3 px-4 text-white placeholder-gray-600 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all"
+                        placeholder="Enter password..." required>
+                    <i class="fas fa-lock absolute right-4 top-3.5 text-gray-500"></i>
+                </div>
+            </div>
 
-      .toggle-btn.active {
-        color: #ffd700;
-        border-bottom: 2px solid #ffd700;
-      }
+            {% if error %}
+            <div class="bg-red-500/10 border border-red-500/20 rounded-lg p-3 text-center">
+                <p class="text-red-400 text-sm">
+                    <i class="fas fa-exclamation-circle mr-1"></i> {{ error }}
+                </p>
+            </div>
+            {% endif %}
 
-      input {
-        width: 100%;
-        padding: 12px;
-        margin: 10px 0;
-        background-color: #27272a;
-        border: 1px solid #333;
-        color: white;
-        border-radius: 8px;
-        outline: none;
-      }
-
-      input:focus {
-        border-color: #ffd700;
-      }
-
-      button.submit-btn {
-        width: 100%;
-        padding: 12px;
-        background-color: #ffd700;
-        color: black;
-        font-weight: bold;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        font-size: 16px;
-        margin-top: 20px;
-        transition: 0.3s;
-      }
-
-      button.submit-btn:hover {
-        background-color: #e6c200;
-        transform: scale(1.02);
-      }
-
-      .form-box {
-        display: none;
-      }
-      .form-box.active {
-        display: block;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <h1>RAVION</h1>
-      <br />
-
-      <div>
-        <button class="toggle-btn active" onclick="goster('giris')">
-          Giriş Yap
-        </button>
-        <button class="toggle-btn" onclick="goster('kayit')">Yeni Kayıt</button>
-      </div>
-      <br />
-
-      <div id="giris-form" class="form-box active">
-        <form action="/login" method="POST">
-          <input
-            type="email"
-            name="email"
-            placeholder="E-Posta Adresi"
-            required
-          />
-          <input type="password" name="password" placeholder="Şifre" required />
-          <button type="submit" class="submit-btn">GİRİŞ YAP</button>
+            <button type="submit" 
+                class="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold py-3 rounded-lg transition-all transform hover:scale-[1.02] shadow-lg shadow-purple-500/25">
+                Authenticate
+            </button>
         </form>
-      </div>
 
-      <div id="kayit-form" class="form-box">
-        <form action="/register" method="POST">
-          <input
-            type="email"
-            name="email"
-            placeholder="E-Posta Adresi"
-            required
-          />
-          <input
-            type="tel"
-            name="phone"
-            placeholder="Telefon Numarası"
-            required
-          />
-          <input
-            type="password"
-            name="password"
-            placeholder="Şifre Belirle"
-            required
-          />
-          <button type="submit" class="submit-btn">KAYIT OL</button>
-        </form>
-      </div>
     </div>
 
-    <script>
-      function goster(tip) {
-        // Butonların rengini ayarla
-        document
-          .querySelectorAll(".toggle-btn")
-          .forEach((btn) => btn.classList.remove("active"));
-        event.target.classList.add("active");
-
-        // Formları gizle/aç
-        document.getElementById("giris-form").classList.remove("active");
-        document.getElementById("kayit-form").classList.remove("active");
-
-        if (tip === "giris") {
-          document.getElementById("giris-form").classList.add("active");
-        } else {
-          document.getElementById("kayit-form").classList.add("active");
-        }
-      }
-    </script>
-  </body>
+</body>
 </html>

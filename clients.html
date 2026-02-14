@@ -2,9 +2,9 @@
 <html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo.png') }}">
-    <title>Ravion Admin Dashboard</title>
+    <title>Ravion - Clients</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -37,8 +37,6 @@
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-    
-
     <style>
         body {
             background-color: #020617;
@@ -56,26 +54,6 @@
             backdrop-filter: blur(12px);
             border: 1px solid rgba(139, 92, 246, 0.1);
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-        }
-
-        .glow-border {
-            position: relative;
-        }
-        
-        .glow-border::after {
-            content: '';
-            position: absolute;
-            inset: -1px;
-            z-index: -1;
-            background: linear-gradient(45deg, #8B5CF6, #3B82F6);
-            opacity: 0.3;
-            border-radius: inherit;
-            filter: blur(5px);
-            transition: opacity 0.3s;
-        }
-        
-        .hover-glow:hover::after {
-            opacity: 0.6;
         }
 
         .sidebar-link {
@@ -131,7 +109,7 @@
 
         <!-- Navigation -->
         <nav class="flex-1 py-6 px-3 space-y-2">
-            <a href="/admin" class="sidebar-link active flex items-center px-4 py-3 text-gray-400 rounded-r-lg group">
+            <a href="/admin" class="sidebar-link flex items-center px-4 py-3 text-gray-400 rounded-r-lg group">
                 <i class="fas fa-chart-line mr-3 text-purple-500 group-hover:text-purple-400"></i>
                 <span class="font-medium">Dashboard</span>
             </a>
@@ -141,7 +119,7 @@
                 <span class="font-medium">Projects</span>
             </a>
 
-            <a href="/clients" class="sidebar-link flex items-center px-4 py-3 text-gray-400 rounded-r-lg group">
+            <a href="/clients" class="sidebar-link active flex items-center px-4 py-3 text-gray-400 rounded-r-lg group">
                 <i class="fas fa-users mr-3 text-blue-500 group-hover:text-blue-400"></i>
                 <span class="font-medium">Clients</span>
             </a>
@@ -160,7 +138,7 @@
                 <i class="fas fa-globe mr-3 text-emerald-500 group-hover:text-emerald-400"></i>
                 <span class="font-medium">Website</span>
             </a>
-
+            
             <a href="/logout" class="sidebar-link flex items-center px-4 py-3 text-gray-400 rounded-r-lg group mt-auto">
                  <i class="fas fa-sign-out-alt mr-3 text-red-500 group-hover:text-red-400"></i>
                 <span class="font-medium">Logout</span>
@@ -191,7 +169,7 @@
             <button id="openSidebar" class="text-gray-400 hover:text-white">
                 <i class="fas fa-bars text-2xl"></i>
             </button>
-            <div class="ml-4 flex items-center">
+             <div class="ml-4 flex items-center">
                 <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Ravion Logo" class="h-8 w-auto mr-2">
                 <span class="font-bold text-white brand-font text-lg">RAVION <span class="text-blue-500">ADMIN</span></span>
             </div>
@@ -202,162 +180,89 @@
 
         <!-- Header -->
         <header class="h-20 px-8 hidden md:flex items-center justify-between border-b border-white/5 bg-ravion-bg/80 backdrop-blur-sm sticky top-0 z-10">
-            <h2 class="text-xl font-semibold text-gray-200">Cockpit Overview</h2>
-            
-            <div class="flex items-center gap-6">
-                <div class="relative hidden">
-                    <input type="text" placeholder="Search..." class="bg-white/5 border border-white/10 rounded-full py-2 px-4 text-sm text-gray-300 focus:outline-none focus:border-purple-500/50 w-64 transition-all">
-                    <i class="fas fa-search absolute right-4 top-2.5 text-gray-500 text-xs"></i>
-                </div>
-                <button class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-gray-400 hover:text-white transition-colors relative">
-                    <i class="fas fa-bell"></i>
-                </button>
-            </div>
+            <h2 class="text-xl font-semibold text-gray-200">Client Management</h2>
         </header>
 
-        <!-- Dashboard Content -->
+        <!-- Content -->
         <div class="p-4 md:p-8 space-y-8">
             
-            <!-- Cards Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                
-                <!-- Card 1: Total Messages -->
-                <div class="glass-panel p-6 rounded-2xl relative overflow-hidden group hover-glow">
-                    <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl text-purple-500">
-                        <i class="fas fa-envelope"></i>
+            <!-- Add New Client Form -->
+            <div class="glass-panel p-6 rounded-2xl relative overflow-hidden">
+                <h3 class="text-lg font-semibold text-white mb-4">Add New Client</h3>
+                <form action="/add_client" method="POST" class="flex flex-col md:flex-row gap-4 items-end">
+                    <div class="flex-1 w-full">
+                        <label class="text-xs text-gray-400 mb-1 block">Full Name</label>
+                        <input type="text" name="name" placeholder="Client Name" required 
+                               class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-gray-200 focus:outline-none focus:border-blue-500/50 transition-all font-medium">
                     </div>
-                    <h3 class="text-gray-400 text-sm font-medium mb-1">Gelen Mesajlar</h3>
-                    <div class="flex items-end gap-3 mb-2">
-                        <span class="text-3xl font-bold text-white tracking-tight">{{ message_count }}</span>
-                    </div>
-                    <p class="text-xs text-gray-500">All time received</p>
-                    <!-- Fake Graph Bar -->
-                    <div class="mt-4 flex gap-1 h-10 items-end opacity-50">
-                        <div class="w-1/6 bg-purple-500/20 h-[30%] rounded-t-sm"></div>
-                        <div class="w-1/6 bg-purple-500/30 h-[50%] rounded-t-sm"></div>
-                        <div class="w-1/6 bg-purple-500/40 h-[40%] rounded-t-sm"></div>
-                        <div class="w-1/6 bg-purple-500/60 h-[70%] rounded-t-sm"></div>
-                        <div class="w-1/6 bg-purple-500/80 h-[60%] rounded-t-sm"></div>
-                        <div class="w-1/6 bg-purple-500 h-[85%] rounded-t-sm"></div>
-                    </div>
-                </div>
 
-                <!-- Card 2: Active Projects -->
-                <div class="glass-panel p-6 rounded-2xl relative overflow-hidden group hover-glow">
-                    <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl text-blue-500">
-                        <i class="fas fa-layer-group"></i>
+                     <div class="flex-1 w-full">
+                        <label class="text-xs text-gray-400 mb-1 block">Company</label>
+                        <input type="text" name="company" placeholder="Company Name" required 
+                               class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-gray-200 focus:outline-none focus:border-blue-500/50 transition-all font-medium">
                     </div>
-                    <h3 class="text-gray-400 text-sm font-medium mb-1">Active Projects</h3>
-                    <div class="flex items-end gap-3 mb-2">
-                        <span class="text-3xl font-bold text-white tracking-tight">{{ project_count }}</span>
-                        <span class="text-blue-400 text-xs font-bold bg-blue-500/10 px-2 py-1 rounded-full mb-1">
-                            Current
-                        </span>
+                    
+                    <div class="w-full md:w-64">
+                         <label class="text-xs text-gray-400 mb-1 block">Email</label>
+                        <input type="email" name="email" placeholder="client@email.com" required 
+                               class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-gray-200 focus:outline-none focus:border-blue-500/50 transition-all font-medium">
                     </div>
-                </div>
 
-                <!-- Card 3: Site Visits -->
-                 <div class="glass-panel p-6 rounded-2xl relative overflow-hidden group hover-glow">
-                    <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl text-fuchsia-500">
-                        <i class="fas fa-chart-line"></i>
+                     <div class="w-full md:w-48">
+                         <label class="text-xs text-gray-400 mb-1 block">Phone</label>
+                        <input type="text" name="phone" placeholder="+90 ..." required 
+                               class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-gray-200 focus:outline-none focus:border-blue-500/50 transition-all font-medium">
                     </div>
-                    <h3 class="text-gray-400 text-sm font-medium mb-1">Site Visits</h3>
-                    <div class="flex items-end gap-3 mb-2">
-                        <span class="text-3xl font-bold text-white tracking-tight">{{ visit_count }}</span>
-                        <span class="text-fuchsia-400 text-xs font-bold bg-fuchsia-500/10 px-2 py-1 rounded-full mb-1">
-                            This Month
-                        </span>
-                    </div>
-                    <p class="text-xs text-gray-500">Live data tracking</p>
-                </div>
+
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white font-medium px-6 py-2.5 rounded-xl transition-all shadow-lg shadow-blue-500/20 whitespace-nowrap">
+                        <i class="fas fa-plus mr-2"></i> Add Client
+                    </button>
+                </form>
             </div>
 
-            <!-- Active Projects Table -->
+            <!-- All Clients Table -->
             <div class="glass-panel rounded-2xl border border-white/5 overflow-hidden">
                 <div class="p-6 border-b border-white/5 flex justify-between items-center">
-                    <h3 class="font-semibold text-lg text-white">Active Projects</h3>
-                </div>
-                <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
-                    <table class="w-full text-left text-sm text-gray-400">
-                        <thead class="bg-white/5 text-gray-200 uppercase text-xs font-semibold">
-                            <tr>
-                                <th class="px-6 py-4">Project Name</th>
-                                <th class="px-6 py-4 text-center">Status</th>
-                                <th class="px-6 py-4">Price</th>
-                                <th class="px-6 py-4 text-right">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-white/5">
-                            {% for project in projects %}
-                            <tr class="hover:bg-white/5 transition-colors">
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center">
-                                            <i class="fas fa-rocket"></i>
-                                        </div>
-                                        <div class="font-medium text-white">{{ project['name'] }}</div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 text-center">
-                                    <span class="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-1 text-xs font-medium text-emerald-400 ring-1 ring-inset ring-emerald-500/20">
-                                        {{ project['status'] }}
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4 font-medium text-white">{{ project['value'] }}</td>
-                                <td class="px-6 py-4 text-right">
-                                    <button class="text-gray-400 hover:text-white"><i class="fas fa-ellipsis-v"></i></button>
-                                </td>
-                            </tr>
-                            {% else %}
-                             <tr>
-                                <td colspan="4" class="px-6 py-8 text-center text-gray-500">No active projects.</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Recent Activity Table -->
-            <div class="glass-panel rounded-2xl border border-white/5 overflow-hidden">
-                <div class="p-6 border-b border-white/5 flex justify-between items-center">
-                    <h3 class="font-semibold text-lg text-white">Son Mesajlar</h3>
-                    <a href="/messages" class="text-xs text-purple-400 hover:text-purple-300 font-medium">View All</a>
+                    <h3 class="font-semibold text-lg text-white">All Clients</h3>
                 </div>
                 <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
                     <table class="w-full text-left text-sm text-gray-400">
                         <thead class="bg-white/5 text-gray-200 uppercase text-xs font-semibold">
                             <tr>
                                 <th class="px-6 py-4">Name</th>
-                                <th class="px-6 py-4">Email</th>
-                                <th class="px-6 py-4">Message</th>
-                                <th class="px-6 py-4 text-right">Action</th>
+                                <th class="px-6 py-4">Company</th>
+                                <th class="px-6 py-4">Contact</th>
+                                <th class="px-6 py-4 text-center">Status</th>
+                                <th class="px-6 py-4 text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-white/5">
-                            {% for msg in latest_messages %}
+                            {% for client in clients %}
                             <tr class="hover:bg-white/5 transition-colors">
+                                <td class="px-6 py-4 font-medium text-white">
+                                    {{ client['name'] }}
+                                </td>
+                                <td class="px-6 py-4">{{ client['company'] }}</td>
                                 <td class="px-6 py-4">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-8 h-8 rounded-full bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold text-xs">
-                                            {{ msg['name'][0] }}
-                                        </div>
-                                        <div>
-                                            <div class="font-medium text-white">{{ msg['name'] }}</div>
-                                        </div>
+                                    <div class="flex flex-col">
+                                        <span>{{ client['email'] }}</span>
+                                        <span class="text-xs text-gray-500">{{ client['phone'] }}</span>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4">{{ msg['email'] }}</td>
-                                <td class="px-6 py-4 truncate max-w-xs">{{ msg['message'] }}</td>
+                                <td class="px-6 py-4 text-center">
+                                    <span class="inline-flex items-center gap-1 rounded-full bg-blue-500/10 px-2 py-1 text-xs font-medium text-blue-400 ring-1 ring-inset ring-blue-500/20">
+                                        {{ client['status'] }}
+                                    </span>
+                                </td>
                                 <td class="px-6 py-4 text-right">
-                                    <a href="/delete_message/{{ msg['id'] }}" onclick="return confirm('Are you sure?')" class="text-xs bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white px-3 py-1 rounded-full transition-all">
-                                        Sil
+                                    <a href="/delete_client/{{ client['id'] }}" onclick="return confirm('Delete this client?')" class="text-red-500 hover:text-red-400 p-2 hover:bg-red-500/10 rounded-lg transition-all" title="Delete Client">
+                                        <i class="fas fa-trash"></i>
                                     </a>
                                 </td>
                             </tr>
                             {% else %}
-                            <tr>
-                                <td colspan="4" class="px-6 py-8 text-center text-gray-500">No messages yet.</td>
+                             <tr>
+                                <td colspan="5" class="px-6 py-8 text-center text-gray-500">No clients found.</td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -387,6 +292,5 @@
             });
         }
     </script>
-
 </body>
 </html>

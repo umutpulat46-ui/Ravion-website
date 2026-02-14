@@ -2,9 +2,9 @@
 <html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo.png') }}">
-    <title>Ravion Admin Dashboard</title>
+    <title>Ravion - Projects</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -36,8 +36,6 @@
     
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
-    
 
     <style>
         body {
@@ -131,12 +129,12 @@
 
         <!-- Navigation -->
         <nav class="flex-1 py-6 px-3 space-y-2">
-            <a href="/admin" class="sidebar-link active flex items-center px-4 py-3 text-gray-400 rounded-r-lg group">
+            <a href="/admin" class="sidebar-link flex items-center px-4 py-3 text-gray-400 rounded-r-lg group">
                 <i class="fas fa-chart-line mr-3 text-purple-500 group-hover:text-purple-400"></i>
                 <span class="font-medium">Dashboard</span>
             </a>
             
-            <a href="/projects" class="sidebar-link flex items-center px-4 py-3 text-gray-400 rounded-r-lg group">
+            <a href="/projects" class="sidebar-link active flex items-center px-4 py-3 text-gray-400 rounded-r-lg group">
                 <i class="fas fa-folder-open mr-3 text-cyan-500 group-hover:text-cyan-400"></i>
                 <span class="font-medium">Projects</span>
             </a>
@@ -160,7 +158,7 @@
                 <i class="fas fa-globe mr-3 text-emerald-500 group-hover:text-emerald-400"></i>
                 <span class="font-medium">Website</span>
             </a>
-
+            
             <a href="/logout" class="sidebar-link flex items-center px-4 py-3 text-gray-400 rounded-r-lg group mt-auto">
                  <i class="fas fa-sign-out-alt mr-3 text-red-500 group-hover:text-red-400"></i>
                 <span class="font-medium">Logout</span>
@@ -198,166 +196,107 @@
         </div>
 
         <!-- Background Ambient Glow -->
-        <div class="absolute top-0 left-0 w-full h-96 bg-gradient-to-b from-blue-900/10 to-transparent pointer-events-none"></div>
+        <div class="absolute top-0 left-0 w-full h-96 bg-gradient-to-b from-cyan-900/10 to-transparent pointer-events-none"></div>
 
         <!-- Header -->
         <header class="h-20 px-8 hidden md:flex items-center justify-between border-b border-white/5 bg-ravion-bg/80 backdrop-blur-sm sticky top-0 z-10">
-            <h2 class="text-xl font-semibold text-gray-200">Cockpit Overview</h2>
-            
-            <div class="flex items-center gap-6">
-                <div class="relative hidden">
-                    <input type="text" placeholder="Search..." class="bg-white/5 border border-white/10 rounded-full py-2 px-4 text-sm text-gray-300 focus:outline-none focus:border-purple-500/50 w-64 transition-all">
-                    <i class="fas fa-search absolute right-4 top-2.5 text-gray-500 text-xs"></i>
-                </div>
-                <button class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-gray-400 hover:text-white transition-colors relative">
-                    <i class="fas fa-bell"></i>
-                </button>
-            </div>
+            <h2 class="text-xl font-semibold text-gray-200">Project Management</h2>
         </header>
 
-        <!-- Dashboard Content -->
+        <!-- Projects Content -->
         <div class="p-4 md:p-8 space-y-8">
             
-            <!-- Cards Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                
-                <!-- Card 1: Total Messages -->
-                <div class="glass-panel p-6 rounded-2xl relative overflow-hidden group hover-glow">
-                    <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl text-purple-500">
-                        <i class="fas fa-envelope"></i>
+            <!-- Add New Project Form -->
+            <div class="glass-panel p-6 rounded-2xl relative overflow-hidden">
+                <h3 class="text-lg font-semibold text-white mb-4">Add New Project</h3>
+                <form action="/add_project" method="POST" class="flex flex-col md:flex-row gap-4 items-end">
+                    <div class="flex-1 w-full">
+                        <label class="text-xs text-gray-400 mb-1 block">Project Name</label>
+                        <input type="text" name="name" placeholder="E.g. E-Commerce Redesign" required 
+                               class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-gray-200 focus:outline-none focus:border-cyan-500/50 transition-all font-medium">
                     </div>
-                    <h3 class="text-gray-400 text-sm font-medium mb-1">Gelen Mesajlar</h3>
-                    <div class="flex items-end gap-3 mb-2">
-                        <span class="text-3xl font-bold text-white tracking-tight">{{ message_count }}</span>
+                    
+                    <div class="w-full md:w-48">
+                        <label class="text-xs text-gray-400 mb-1 block">Value</label>
+                        <input type="text" name="value" placeholder="E.g. $1,500" required 
+                               class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-gray-200 focus:outline-none focus:border-cyan-500/50 transition-all font-medium">
                     </div>
-                    <p class="text-xs text-gray-500">All time received</p>
-                    <!-- Fake Graph Bar -->
-                    <div class="mt-4 flex gap-1 h-10 items-end opacity-50">
-                        <div class="w-1/6 bg-purple-500/20 h-[30%] rounded-t-sm"></div>
-                        <div class="w-1/6 bg-purple-500/30 h-[50%] rounded-t-sm"></div>
-                        <div class="w-1/6 bg-purple-500/40 h-[40%] rounded-t-sm"></div>
-                        <div class="w-1/6 bg-purple-500/60 h-[70%] rounded-t-sm"></div>
-                        <div class="w-1/6 bg-purple-500/80 h-[60%] rounded-t-sm"></div>
-                        <div class="w-1/6 bg-purple-500 h-[85%] rounded-t-sm"></div>
-                    </div>
-                </div>
 
-                <!-- Card 2: Active Projects -->
-                <div class="glass-panel p-6 rounded-2xl relative overflow-hidden group hover-glow">
-                    <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl text-blue-500">
-                        <i class="fas fa-layer-group"></i>
+                    <div class="w-full md:w-48">
+                        <label class="text-xs text-gray-400 mb-1 block">Status</label>
+                        <select name="status" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-gray-200 focus:outline-none focus:border-cyan-500/50 transition-all font-medium appearance-none cursor-pointer">
+                            <option value="Pending" class="bg-gray-900">Pending</option>
+                            <option value="Ongoing" class="bg-gray-900">Ongoing</option>
+                            <option value="Completed" class="bg-gray-900">Completed</option>
+                        </select>
                     </div>
-                    <h3 class="text-gray-400 text-sm font-medium mb-1">Active Projects</h3>
-                    <div class="flex items-end gap-3 mb-2">
-                        <span class="text-3xl font-bold text-white tracking-tight">{{ project_count }}</span>
-                        <span class="text-blue-400 text-xs font-bold bg-blue-500/10 px-2 py-1 rounded-full mb-1">
-                            Current
-                        </span>
-                    </div>
-                </div>
 
-                <!-- Card 3: Site Visits -->
-                 <div class="glass-panel p-6 rounded-2xl relative overflow-hidden group hover-glow">
-                    <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl text-fuchsia-500">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <h3 class="text-gray-400 text-sm font-medium mb-1">Site Visits</h3>
-                    <div class="flex items-end gap-3 mb-2">
-                        <span class="text-3xl font-bold text-white tracking-tight">{{ visit_count }}</span>
-                        <span class="text-fuchsia-400 text-xs font-bold bg-fuchsia-500/10 px-2 py-1 rounded-full mb-1">
-                            This Month
-                        </span>
-                    </div>
-                    <p class="text-xs text-gray-500">Live data tracking</p>
-                </div>
+                    <button type="submit" class="bg-cyan-600 hover:bg-cyan-500 text-white font-medium px-6 py-2.5 rounded-xl transition-all shadow-lg shadow-cyan-500/20 whitespace-nowrap">
+                        <i class="fas fa-plus mr-2"></i> Add Project
+                    </button>
+                </form>
             </div>
 
-            <!-- Active Projects Table -->
+            <!-- All Projects Table -->
             <div class="glass-panel rounded-2xl border border-white/5 overflow-hidden">
                 <div class="p-6 border-b border-white/5 flex justify-between items-center">
-                    <h3 class="font-semibold text-lg text-white">Active Projects</h3>
+                    <h3 class="font-semibold text-lg text-white">All Projects</h3>
                 </div>
                 <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
                     <table class="w-full text-left text-sm text-gray-400">
                         <thead class="bg-white/5 text-gray-200 uppercase text-xs font-semibold">
                             <tr>
+                                <th class="px-6 py-4">ID</th>
                                 <th class="px-6 py-4">Project Name</th>
                                 <th class="px-6 py-4 text-center">Status</th>
-                                <th class="px-6 py-4">Price</th>
-                                <th class="px-6 py-4 text-right">Action</th>
+                                <th class="px-6 py-4">Value</th>
+                                <th class="px-6 py-4 text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-white/5">
                             {% for project in projects %}
                             <tr class="hover:bg-white/5 transition-colors">
+                                <td class="px-6 py-4 text-xs font-mono text-gray-600">#{{ project['id'] }}</td>
                                 <td class="px-6 py-4">
                                     <div class="flex items-center gap-3">
-                                        <div class="w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center">
-                                            <i class="fas fa-rocket"></i>
+                                        <div class="w-8 h-8 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center">
+                                            <i class="fas fa-layer-group"></i>
                                         </div>
                                         <div class="font-medium text-white">{{ project['name'] }}</div>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 text-center">
+                                    {% if project['status'] == 'Completed' %}
                                     <span class="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-1 text-xs font-medium text-emerald-400 ring-1 ring-inset ring-emerald-500/20">
-                                        {{ project['status'] }}
+                                        Completed
                                     </span>
+                                    {% elif project['status'] == 'Ongoing' %}
+                                    <span class="inline-flex items-center gap-1 rounded-full bg-blue-500/10 px-2 py-1 text-xs font-medium text-blue-400 ring-1 ring-inset ring-blue-500/20">
+                                        Ongoing
+                                    </span>
+                                    {% else %}
+                                    <span class="inline-flex items-center gap-1 rounded-full bg-yellow-500/10 px-2 py-1 text-xs font-medium text-yellow-400 ring-1 ring-inset ring-yellow-500/20">
+                                        Pending
+                                    </span>
+                                    {% endif %}
                                 </td>
-                                <td class="px-6 py-4 font-medium text-white">{{ project['value'] }}</td>
+                                <td class="px-6 py-4 font-mono text-gray-300">{{ project['value'] }}</td>
                                 <td class="px-6 py-4 text-right">
-                                    <button class="text-gray-400 hover:text-white"><i class="fas fa-ellipsis-v"></i></button>
+                                    <div class="flex items-center justify-end gap-2">
+                                        {% if project['status'] != 'Completed' %}
+                                        <a href="/complete_project/{{ project['id'] }}" class="text-emerald-500 hover:text-emerald-400 p-2 hover:bg-emerald-500/10 rounded-lg transition-all" title="Mark as Completed">
+                                            <i class="fas fa-check"></i>
+                                        </a>
+                                        {% endif %}
+                                        <a href="/delete_project/{{ project['id'] }}" onclick="return confirm('Delete this project?')" class="text-red-500 hover:text-red-400 p-2 hover:bg-red-500/10 rounded-lg transition-all" title="Delete Project">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
                                 </td>
                             </tr>
                             {% else %}
                              <tr>
-                                <td colspan="4" class="px-6 py-8 text-center text-gray-500">No active projects.</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Recent Activity Table -->
-            <div class="glass-panel rounded-2xl border border-white/5 overflow-hidden">
-                <div class="p-6 border-b border-white/5 flex justify-between items-center">
-                    <h3 class="font-semibold text-lg text-white">Son Mesajlar</h3>
-                    <a href="/messages" class="text-xs text-purple-400 hover:text-purple-300 font-medium">View All</a>
-                </div>
-                <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
-                    <table class="w-full text-left text-sm text-gray-400">
-                        <thead class="bg-white/5 text-gray-200 uppercase text-xs font-semibold">
-                            <tr>
-                                <th class="px-6 py-4">Name</th>
-                                <th class="px-6 py-4">Email</th>
-                                <th class="px-6 py-4">Message</th>
-                                <th class="px-6 py-4 text-right">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-white/5">
-                            {% for msg in latest_messages %}
-                            <tr class="hover:bg-white/5 transition-colors">
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-8 h-8 rounded-full bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold text-xs">
-                                            {{ msg['name'][0] }}
-                                        </div>
-                                        <div>
-                                            <div class="font-medium text-white">{{ msg['name'] }}</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4">{{ msg['email'] }}</td>
-                                <td class="px-6 py-4 truncate max-w-xs">{{ msg['message'] }}</td>
-                                <td class="px-6 py-4 text-right">
-                                    <a href="/delete_message/{{ msg['id'] }}" onclick="return confirm('Are you sure?')" class="text-xs bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white px-3 py-1 rounded-full transition-all">
-                                        Sil
-                                    </a>
-                                </td>
-                            </tr>
-                            {% else %}
-                            <tr>
-                                <td colspan="4" class="px-6 py-8 text-center text-gray-500">No messages yet.</td>
+                                <td colspan="5" class="px-6 py-8 text-center text-gray-500">No projects found. Add one above.</td>
                             </tr>
                             {% endfor %}
                         </tbody>

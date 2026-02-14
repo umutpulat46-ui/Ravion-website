@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo.png') }}">
-    <title>Ravion Admin Dashboard</title>
+    <title>Ravion - Messages</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -20,6 +20,7 @@
                             sidebar: '#0B1120',
                             primary: '#8B5CF6',
                             secondary: '#3B82F6',
+                            accent: '#D946EF', // Fuchsia 500
                         }
                     },
                     fontFamily: {
@@ -36,8 +37,6 @@
     
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
-    
 
     <style>
         body {
@@ -93,7 +92,7 @@
             width: 24px;
             text-align: center;
         }
-
+        
         /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 6px;
@@ -107,6 +106,11 @@
         }
         ::-webkit-scrollbar-thumb:hover {
             background: #8B5CF6;
+        }
+
+        /* Table Styles */
+        tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.02);
         }
     </style>
 </head>
@@ -131,7 +135,7 @@
 
         <!-- Navigation -->
         <nav class="flex-1 py-6 px-3 space-y-2">
-            <a href="/admin" class="sidebar-link active flex items-center px-4 py-3 text-gray-400 rounded-r-lg group">
+            <a href="/admin" class="sidebar-link flex items-center px-4 py-3 text-gray-400 rounded-r-lg group">
                 <i class="fas fa-chart-line mr-3 text-purple-500 group-hover:text-purple-400"></i>
                 <span class="font-medium">Dashboard</span>
             </a>
@@ -151,7 +155,7 @@
                 <span class="font-medium">Team</span>
             </a>
             
-            <a href="/messages" class="sidebar-link flex items-center px-4 py-3 text-gray-400 rounded-r-lg group">
+            <a href="/messages" class="sidebar-link active flex items-center px-4 py-3 text-gray-400 rounded-r-lg group">
                 <i class="fas fa-envelope mr-3 text-fuchsia-500 group-hover:text-fuchsia-400"></i>
                 <span class="font-medium">Messages</span>
             </a>
@@ -160,7 +164,7 @@
                 <i class="fas fa-globe mr-3 text-emerald-500 group-hover:text-emerald-400"></i>
                 <span class="font-medium">Website</span>
             </a>
-
+            
             <a href="/logout" class="sidebar-link flex items-center px-4 py-3 text-gray-400 rounded-r-lg group mt-auto">
                  <i class="fas fa-sign-out-alt mr-3 text-red-500 group-hover:text-red-400"></i>
                 <span class="font-medium">Logout</span>
@@ -191,173 +195,84 @@
             <button id="openSidebar" class="text-gray-400 hover:text-white">
                 <i class="fas fa-bars text-2xl"></i>
             </button>
-            <div class="ml-4 flex items-center">
+             <div class="ml-4 flex items-center">
                 <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Ravion Logo" class="h-8 w-auto mr-2">
                 <span class="font-bold text-white brand-font text-lg">RAVION <span class="text-blue-500">ADMIN</span></span>
             </div>
         </div>
 
         <!-- Background Ambient Glow -->
-        <div class="absolute top-0 left-0 w-full h-96 bg-gradient-to-b from-blue-900/10 to-transparent pointer-events-none"></div>
+        <div class="absolute top-0 left-0 w-full h-96 bg-gradient-to-b from-fuchsia-900/10 to-transparent pointer-events-none"></div>
 
         <!-- Header -->
         <header class="h-20 px-8 hidden md:flex items-center justify-between border-b border-white/5 bg-ravion-bg/80 backdrop-blur-sm sticky top-0 z-10">
-            <h2 class="text-xl font-semibold text-gray-200">Cockpit Overview</h2>
+            <h2 class="text-xl font-semibold text-gray-200">Inbox</h2>
             
             <div class="flex items-center gap-6">
                 <div class="relative hidden">
-                    <input type="text" placeholder="Search..." class="bg-white/5 border border-white/10 rounded-full py-2 px-4 text-sm text-gray-300 focus:outline-none focus:border-purple-500/50 w-64 transition-all">
+                    <input type="text" placeholder="Search messages..." class="bg-white/5 border border-white/10 rounded-full py-2 px-4 text-sm text-gray-300 focus:outline-none focus:border-purple-500/50 w-64 transition-all">
                     <i class="fas fa-search absolute right-4 top-2.5 text-gray-500 text-xs"></i>
                 </div>
-                <button class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-gray-400 hover:text-white transition-colors relative">
-                    <i class="fas fa-bell"></i>
+                <!-- Refresh Button -->
+                <button onclick="location.reload()" class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-gray-400 hover:text-white transition-colors">
+                    <i class="fas fa-sync-alt"></i>
                 </button>
             </div>
         </header>
 
-        <!-- Dashboard Content -->
+        <!-- Messages Content -->
         <div class="p-4 md:p-8 space-y-8">
             
-            <!-- Cards Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="glass-panel rounded-2xl border border-white/5 overflow-hidden">
+                <div class="p-6 border-b border-white/5 flex justify-between items-center">
+                    <h3 class="font-semibold text-lg text-white">All Messages</h3>
+                    <div class="flex gap-2 hidden">
+                        <button class="px-3 py-1 bg-white/5 hover:bg-white/10 rounded-lg text-xs text-gray-300 transition-colors">Unread</button>
+                        <button class="px-3 py-1 bg-purple-600 hover:bg-purple-500 rounded-lg text-xs text-white transition-colors">All</button>
+                    </div>
+                </div>
                 
-                <!-- Card 1: Total Messages -->
-                <div class="glass-panel p-6 rounded-2xl relative overflow-hidden group hover-glow">
-                    <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl text-purple-500">
-                        <i class="fas fa-envelope"></i>
-                    </div>
-                    <h3 class="text-gray-400 text-sm font-medium mb-1">Gelen Mesajlar</h3>
-                    <div class="flex items-end gap-3 mb-2">
-                        <span class="text-3xl font-bold text-white tracking-tight">{{ message_count }}</span>
-                    </div>
-                    <p class="text-xs text-gray-500">All time received</p>
-                    <!-- Fake Graph Bar -->
-                    <div class="mt-4 flex gap-1 h-10 items-end opacity-50">
-                        <div class="w-1/6 bg-purple-500/20 h-[30%] rounded-t-sm"></div>
-                        <div class="w-1/6 bg-purple-500/30 h-[50%] rounded-t-sm"></div>
-                        <div class="w-1/6 bg-purple-500/40 h-[40%] rounded-t-sm"></div>
-                        <div class="w-1/6 bg-purple-500/60 h-[70%] rounded-t-sm"></div>
-                        <div class="w-1/6 bg-purple-500/80 h-[60%] rounded-t-sm"></div>
-                        <div class="w-1/6 bg-purple-500 h-[85%] rounded-t-sm"></div>
-                    </div>
-                </div>
-
-                <!-- Card 2: Active Projects -->
-                <div class="glass-panel p-6 rounded-2xl relative overflow-hidden group hover-glow">
-                    <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl text-blue-500">
-                        <i class="fas fa-layer-group"></i>
-                    </div>
-                    <h3 class="text-gray-400 text-sm font-medium mb-1">Active Projects</h3>
-                    <div class="flex items-end gap-3 mb-2">
-                        <span class="text-3xl font-bold text-white tracking-tight">{{ project_count }}</span>
-                        <span class="text-blue-400 text-xs font-bold bg-blue-500/10 px-2 py-1 rounded-full mb-1">
-                            Current
-                        </span>
-                    </div>
-                </div>
-
-                <!-- Card 3: Site Visits -->
-                 <div class="glass-panel p-6 rounded-2xl relative overflow-hidden group hover-glow">
-                    <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl text-fuchsia-500">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <h3 class="text-gray-400 text-sm font-medium mb-1">Site Visits</h3>
-                    <div class="flex items-end gap-3 mb-2">
-                        <span class="text-3xl font-bold text-white tracking-tight">{{ visit_count }}</span>
-                        <span class="text-fuchsia-400 text-xs font-bold bg-fuchsia-500/10 px-2 py-1 rounded-full mb-1">
-                            This Month
-                        </span>
-                    </div>
-                    <p class="text-xs text-gray-500">Live data tracking</p>
-                </div>
-            </div>
-
-            <!-- Active Projects Table -->
-            <div class="glass-panel rounded-2xl border border-white/5 overflow-hidden">
-                <div class="p-6 border-b border-white/5 flex justify-between items-center">
-                    <h3 class="font-semibold text-lg text-white">Active Projects</h3>
-                </div>
                 <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
                     <table class="w-full text-left text-sm text-gray-400">
                         <thead class="bg-white/5 text-gray-200 uppercase text-xs font-semibold">
                             <tr>
-                                <th class="px-6 py-4">Project Name</th>
-                                <th class="px-6 py-4 text-center">Status</th>
-                                <th class="px-6 py-4">Price</th>
-                                <th class="px-6 py-4 text-right">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-white/5">
-                            {% for project in projects %}
-                            <tr class="hover:bg-white/5 transition-colors">
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center">
-                                            <i class="fas fa-rocket"></i>
-                                        </div>
-                                        <div class="font-medium text-white">{{ project['name'] }}</div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 text-center">
-                                    <span class="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-1 text-xs font-medium text-emerald-400 ring-1 ring-inset ring-emerald-500/20">
-                                        {{ project['status'] }}
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4 font-medium text-white">{{ project['value'] }}</td>
-                                <td class="px-6 py-4 text-right">
-                                    <button class="text-gray-400 hover:text-white"><i class="fas fa-ellipsis-v"></i></button>
-                                </td>
-                            </tr>
-                            {% else %}
-                             <tr>
-                                <td colspan="4" class="px-6 py-8 text-center text-gray-500">No active projects.</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Recent Activity Table -->
-            <div class="glass-panel rounded-2xl border border-white/5 overflow-hidden">
-                <div class="p-6 border-b border-white/5 flex justify-between items-center">
-                    <h3 class="font-semibold text-lg text-white">Son Mesajlar</h3>
-                    <a href="/messages" class="text-xs text-purple-400 hover:text-purple-300 font-medium">View All</a>
-                </div>
-                <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
-                    <table class="w-full text-left text-sm text-gray-400">
-                        <thead class="bg-white/5 text-gray-200 uppercase text-xs font-semibold">
-                            <tr>
-                                <th class="px-6 py-4">Name</th>
+                                <th class="px-6 py-4">ID</th>
+                                <th class="px-6 py-4">Sender</th>
                                 <th class="px-6 py-4">Email</th>
                                 <th class="px-6 py-4">Message</th>
-                                <th class="px-6 py-4 text-right">Action</th>
+                                <th class="px-6 py-4 text-right">Date</th>
+                                <th class="px-6 py-4 text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-white/5">
-                            {% for msg in latest_messages %}
-                            <tr class="hover:bg-white/5 transition-colors">
+                            {% for msg in messages %}
+                            <tr class="hover:bg-white/5 transition-colors group">
+                                <td class="px-6 py-4 text-xs font-mono text-gray-600">#{{ msg['id'] }}</td>
                                 <td class="px-6 py-4">
                                     <div class="flex items-center gap-3">
-                                        <div class="w-8 h-8 rounded-full bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold text-xs">
+                                        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-fuchsia-500/20 to-purple-500/20 text-fuchsia-400 flex items-center justify-center font-bold text-xs uppercase border border-fuchsia-500/30">
                                             {{ msg['name'][0] }}
                                         </div>
-                                        <div>
-                                            <div class="font-medium text-white">{{ msg['name'] }}</div>
-                                        </div>
+                                        <div class="font-medium text-white">{{ msg['name'] }}</div>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4">{{ msg['email'] }}</td>
-                                <td class="px-6 py-4 truncate max-w-xs">{{ msg['message'] }}</td>
+                                <td class="px-6 py-4 text-gray-300">
+                                    <a href="mailto:{{ msg['email'] }}" class="hover:text-purple-400 transition-colors">{{ msg['email'] }}</a>
+                                </td>
+                                <td class="px-6 py-4 max-w-md truncate text-gray-400">{{ msg['message'] }}</td>
+                                <td class="px-6 py-4 text-right text-xs text-gray-500 font-mono">{{ msg['timestamp'] }}</td>
                                 <td class="px-6 py-4 text-right">
-                                    <a href="/delete_message/{{ msg['id'] }}" onclick="return confirm('Are you sure?')" class="text-xs bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white px-3 py-1 rounded-full transition-all">
-                                        Sil
+                                    <a href="/delete_message/{{ msg['id'] }}" onclick="return confirm('Are you sure?')" class="text-red-500 hover:text-red-400 p-2 hover:bg-red-500/10 rounded-lg transition-all">
+                                        <i class="fas fa-trash"></i>
                                     </a>
                                 </td>
                             </tr>
                             {% else %}
                             <tr>
-                                <td colspan="4" class="px-6 py-8 text-center text-gray-500">No messages yet.</td>
+                                <td colspan="5" class="px-6 py-12 text-center text-gray-500">
+                                    <i class="fas fa-inbox text-4xl mb-3 opacity-20 block"></i>
+                                    No messages found.
+                                </td>
                             </tr>
                             {% endfor %}
                         </tbody>

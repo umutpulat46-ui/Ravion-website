@@ -647,4 +647,144 @@ footer {
     top: -10px !important;
     font-size: 0.85rem !important;
     color: #D4AF37 !important;
+    }
+/* --- ESNAF PAKETLERİ (DARK PREMIUM) --- */
+.esnaf-section {
+    padding: 100px 0;
+    background-color: #0a0a0a; /* Zifiri karanlık zemin */
+    text-align: center;
+    border-top: 1px solid #333; /* İnce bir çizgi ile ayır */
+}
+
+.esnaf-title {
+    font-size: 2.8rem;
+    color: #fff; /* Beyaz başlık */
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.esnaf-subtitle {
+    color: #aaa; /* Gri alt başlık */
+    font-size: 1.1rem;
+    margin-bottom: 50px;
+}
+
+.esnaf-grid {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.esnaf-card {
+    background: #151515; /* Kart rengi koyu gri */
+    padding: 40px 25px;
+    border-radius: 20px;
+    width: 320px;
+    border: 1px solid #333;
+    transition: all 0.4s ease;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Kartın üzerine gelince parlasın */
+.esnaf-card:hover {
+    transform: translateY(-10px);
+    border-color: #ffd700; /* ALTIN RENGİ ÇERÇEVE */
+    box-shadow: 0 10px 40px rgba(255, 215, 0, 0.15); /* Altın parıltısı */
+}
+
+/* Ortadaki Popüler Kart */
+.esnaf-card.popular {
+    border: 2px solid #ffd700; /* Altın çerçeve */
+    background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
+    transform: scale(1.05); /* Diğerlerinden biraz büyük dursun */
+}
+
+.esnaf-card.popular:hover {
+    transform: scale(1.05) translateY(-10px);
+}
+
+.icon {
+    font-size: 3.5rem;
+    margin-bottom: 20px;
+}
+
+.esnaf-card h3 {
+    color: #fff;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.desc {
+    color: #888;
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+    min-height: 45px; /* Hizalamayı düzgün tutar */
+}
+
+.price {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #ffd700; /* Fiyatlar ALTIN sarısı */
+    margin: 15px 0;
+}
+
+.tek-sefer {
+    font-size: 0.9rem;
+    color: #666;
+    font-weight: normal;
+}
+
+.ozellikler {
+    list-style: none;
+    padding: 0;
+    text-align: left;
+    width: 100%;
+    margin-bottom: 30px;
+    border-top: 1px solid #333;
+    padding-top: 20px;
+}
+
+.ozellikler li {
+    color: #ccc;
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+}
+
+.esnaf-btn {
+    margin-top: auto;
+    padding: 12px 40px;
+    border: 2px solid #ffd700;
+    color: #ffd700;
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: bold;
+    transition: 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.esnaf-btn:hover, .esnaf-btn.fill {
+    background: #ffd700;
+    color: #000; /* Altın üstüne siyah yazı */
+    box-shadow: 0 0 15px #ffd700; /* Buton parlasın */
+}
+
+/* "En Çok Satan" Etiketi */
+.badge {
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #ffd700;
+    color: #000;
+    padding: 8px 20px;
+    font-size: 0.8rem;
+    border-radius: 30px;
+    font-weight: 900;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    z-index: 2;
 }
