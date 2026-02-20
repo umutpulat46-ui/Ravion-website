@@ -1,10 +1,13 @@
 from flask import Flask, render_template, request, redirect, session, url_for, send_from_directory, flash, g
 import sqlite3
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Configure Flask
 app = Flask(__name__, template_folder='.')
-app.secret_key = "ravion_secret_key_12345"
+app.secret_key = os.environ.get("SECRET_KEY", "fallback_secret_key")
 DATABASE = 'agency.db'
 
 def get_db():
@@ -75,14 +78,17 @@ def send_message():
 def login():
     error = None
     if request.method == 'POST':
-        print('LOGIN REQUEST RECEIVED...') # Debug print
         username = request.form.get('username')
         password = request.form.get('password')
-        print(f"User: {username}, Pass: {password}")
 
-        # NUCLEAR LOGIN: FORCE SUCCESS
-        session['logged_in'] = True
-        return redirect('/admin') 
+        admin_user = os.environ.get("ADMIN_USERNAME", "admin")
+        admin_pass = os.environ.get("ADMIN_PASSWORD", "ravionadmin")
+
+        if username == admin_user and password == admin_pass:
+            session['logged_in'] = True
+            return redirect('/admin') 
+        else:
+            error = "Invalid credentials. Please try again."
 
     return render_template('login.html', error=error)
 
