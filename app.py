@@ -2,6 +2,8 @@ from flask import Flask, render_template, request, redirect, session, url_for, s
 import sqlite3
 import os
 from dotenv import load_dotenv
+from werkzeug.security import check_password_hash
+from functools import wraps
 
 load_dotenv()
 
@@ -29,6 +31,16 @@ def serve_static(filename):
     if filename.lower().endswith(('.css', '.js', '.png', '.jpg', '.jpeg', '.gif', '.ico', '.svg', '.woff', '.woff2', '.ttf')):
         return send_from_directory('.', filename)
     return "Not Found", 404
+
+# --- AUTH DECORATOR ---
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not session.get('logged_in'):
+            return redirect('/login')
+        return f(*args, **kwargs)
+    return decorated_function
+
 
 # --- PUBLIC ROUTES ---
 @app.route('/')
@@ -81,14 +93,17 @@ def login():
         username = request.form.get('username')
         password = request.form.get('password')
 
-        admin_user = os.environ.get("ADMIN_USERNAME", "admin")
-        admin_pass = os.environ.get("ADMIN_PASSWORD", "ravionadmin")
+        db = get_db()
+        cursor = db.execute('SELECT * FROM admins WHERE username = ?', (username,))
+        admin_row = cursor.fetchone()
 
-        if username == admin_user and password == admin_pass:
+        if admin_row and check_password_hash(admin_row['password_hash'], password):
             session['logged_in'] = True
+            session['admin_id'] = admin_row['id']
+            session['admin_username'] = admin_row['username']
             return redirect('/admin') 
         else:
-            error = "Invalid credentials. Please try again."
+            error = "Access Denied. Unauthorized entry attempt."
 
     return render_template('login.html', error=error)
 
@@ -98,8 +113,8 @@ def logout():
     return redirect('/login')
 
 @app.route('/delete_message/<int:id>')
+@login_required
 def delete_message(id):
-    if not session.get('logged_in'): return redirect('/login')
     
     db = get_db()
     db.execute('DELETE FROM messages WHERE id = ?', (id,))
@@ -109,10 +124,8 @@ def delete_message(id):
     return redirect('/messages')
 
 @app.route('/admin')
+@login_required
 def admin():
-    # Simple render check
-    if not session.get('logged_in'):
-        return redirect('/login')
     
     db = get_db()
     
@@ -150,8 +163,8 @@ def admin_html():
     return redirect('/admin')
 
 @app.route('/clients')
+@login_required
 def clients():
-    if not session.get('logged_in'): return redirect('/login')
     
     db = get_db()
     cursor = db.execute('SELECT * FROM clients ORDER BY id DESC')
@@ -160,8 +173,8 @@ def clients():
     return render_template('clients.html', clients=clients)
 
 @app.route('/add_client', methods=['POST'])
+@login_required
 def add_client():
-    if not session.get('logged_in'): return redirect('/login')
     
     name = request.form.get('name')
     company = request.form.get('company')
@@ -176,8 +189,8 @@ def add_client():
     return redirect('/clients')
 
 @app.route('/delete_client/<int:id>')
+@login_required
 def delete_client(id):
-    if not session.get('logged_in'): return redirect('/login')
     
     db = get_db()
     db.execute('DELETE FROM clients WHERE id = ?', (id,))
@@ -186,8 +199,8 @@ def delete_client(id):
     return redirect('/clients')
 
 @app.route('/team')
+@login_required
 def team():
-    if not session.get('logged_in'): return redirect('/login')
     
     db = get_db()
     cursor = db.execute('SELECT * FROM employees ORDER BY id DESC')
@@ -196,8 +209,8 @@ def team():
     return render_template('team.html', team=team)
 
 @app.route('/add_employee', methods=['POST'])
+@login_required
 def add_employee():
-    if not session.get('logged_in'): return redirect('/login')
     
     name = request.form.get('name')
     role = request.form.get('role')
@@ -211,8 +224,8 @@ def add_employee():
     return redirect('/team')
 
 @app.route('/delete_employee/<int:id>')
+@login_required
 def delete_employee(id):
-    if not session.get('logged_in'): return redirect('/login')
     
     db = get_db()
     db.execute('DELETE FROM employees WHERE id = ?', (id,))
@@ -221,8 +234,8 @@ def delete_employee(id):
     return redirect('/team')
 
 @app.route('/messages')
+@login_required
 def messages_route():
-    if not session.get('logged_in'): return redirect('/login')
     
     db = get_db()
     cursor = db.execute('SELECT * FROM messages ORDER BY id DESC')
@@ -235,8 +248,8 @@ def messages_html():
     return redirect('/messages')
 
 @app.route('/projects')
+@login_required
 def projects():
-    if not session.get('logged_in'): return redirect('/login')
     
     db = get_db()
     cursor = db.execute('SELECT * FROM projects ORDER BY id DESC')
@@ -245,8 +258,8 @@ def projects():
     return render_template('projects.html', projects=projects)
 
 @app.route('/add_project', methods=['POST'])
+@login_required
 def add_project():
-    if not session.get('logged_in'): return redirect('/login')
     
     name = request.form.get('name')
     value = request.form.get('value')
@@ -260,8 +273,8 @@ def add_project():
     return redirect('/projects')
 
 @app.route('/delete_project/<int:id>')
+@login_required
 def delete_project(id):
-    if not session.get('logged_in'): return redirect('/login')
     
     db = get_db()
     db.execute('DELETE FROM projects WHERE id = ?', (id,))
@@ -270,8 +283,8 @@ def delete_project(id):
     return redirect('/projects')
 
 @app.route('/complete_project/<int:id>')
+@login_required
 def complete_project(id):
-    if not session.get('logged_in'): return redirect('/login')
     
     db = get_db()
     db.execute("UPDATE projects SET status = 'Completed' WHERE id = ?", (id,))
