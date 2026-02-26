@@ -157,6 +157,10 @@
             to { transform: translateX(0); opacity: 1; }
         }
     </style>
+
+    <!-- Three.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 </head>
 <body class="antialiased selection:bg-purple-500 selection:text-white">
 
@@ -213,6 +217,9 @@
         <div class="absolute inset-0 bg-gradient-glow opacity-60"></div>
         <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-[100px] animate-pulse-slow"></div>
         <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-600/20 rounded-full blur-[100px] animate-pulse-slow" style="animation-delay: 2s;"></div>
+        
+        <!-- 3D WebGL Background Canvas -->
+        <canvas id="webgl-hero" class="absolute inset-0 w-full h-full z-0 opacity-80" style="pointer-events: none;"></canvas>
 
         <div class="relative z-10 text-center px-6 max-w-5xl mx-auto">
             <span class="reveal inline-block py-1 px-3 rounded-full bg-white/5 border border-white/10 text-xs font-semibold tracking-widest text-purple-400 mb-6 uppercase">
@@ -456,6 +463,124 @@
                 }
             });
         });
+
+        // --- Three.js 3D Background Interactivity ---
+        const initThreeJS = () => {
+            const canvas = document.querySelector('#webgl-hero');
+            if (!canvas) return;
+
+            // Scene setup
+            const scene = new THREE.Scene();
+            
+            // Camera setup
+            const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+            camera.position.z = 5;
+
+            // Renderer setup
+            const renderer = new THREE.WebGLRenderer({
+                canvas: canvas,
+                alpha: true,
+                antialias: true
+            });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+            // Abstract Glass Prism Geometry
+            // Create a custom abstract shape using an Icosahedron
+            const geometry = new THREE.IcosahedronGeometry(1.5, 0);
+
+            // Create a glass material
+            const material = new THREE.MeshPhysicalMaterial({
+                color: 0xffffff,
+                metalness: 0.1,
+                roughness: 0.05,
+                transmission: 0.9, // glass-like transparency
+                ior: 1.5,
+                thickness: 2.0,
+                transparent: true,
+                opacity: 1,
+                side: THREE.DoubleSide
+            });
+
+            const prism = new THREE.Mesh(geometry, material);
+            scene.add(prism);
+
+            // Lighting to create neon edges and refractions
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+            scene.add(ambientLight);
+
+            const purpleLight = new THREE.PointLight(0x8B5CF6, 50, 20); // Purple 500
+            purpleLight.position.set(3, 3, 2);
+            scene.add(purpleLight);
+
+            const blueLight = new THREE.PointLight(0x3B82F6, 50, 20); // Blue 500
+            blueLight.position.set(-3, -3, 2);
+            scene.add(blueLight);
+            
+            // Mouse Interaction Tracker
+            const mouse = {
+                x: 0,
+                y: 0,
+                targetX: 0,
+                targetY: 0
+            };
+
+            const windowHalfX = window.innerWidth / 2;
+            const windowHalfY = window.innerHeight / 2;
+
+            document.addEventListener('mousemove', (event) => {
+                mouse.targetX = (event.clientX - windowHalfX) * 0.002;
+                mouse.targetY = (event.clientY - windowHalfY) * 0.002;
+            });
+
+            // Animation Loop
+            const clock = new THREE.Clock();
+
+            const tick = () => {
+                const elapsedTime = clock.getElapsedTime();
+
+                // Base Slow Rotation
+                prism.rotation.y = elapsedTime * 0.2;
+                prism.rotation.x = elapsedTime * 0.1;
+                prism.position.y = Math.sin(elapsedTime * 0.5) * 0.1; // Float up and down
+
+                // Mouse interaction lerp (smooth follow)
+                mouse.x += (mouse.targetX - mouse.x) * 0.05;
+                mouse.y += (mouse.targetY - mouse.y) * 0.05;
+
+                prism.rotation.y += mouse.x;
+                prism.rotation.x += mouse.y;
+
+                // Move lights slightly
+                purpleLight.position.x = Math.sin(elapsedTime) * 3;
+                purpleLight.position.z = Math.cos(elapsedTime) * 3;
+                
+                blueLight.position.x = -Math.sin(elapsedTime) * 3;
+                blueLight.position.z = -Math.cos(elapsedTime) * 3;
+
+                // Render
+                renderer.render(scene, camera);
+
+                // Call tick again on the next frame
+                window.requestAnimationFrame(tick);
+            };
+
+            tick();
+
+            // Resize handler
+            window.addEventListener('resize', () => {
+                // Update camera
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+
+                // Update renderer
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            });
+        };
+
+        // Initialize Three.js when DOM is ready
+        document.addEventListener('DOMContentLoaded', initThreeJS);
     </script>
 </body>
 </html>
