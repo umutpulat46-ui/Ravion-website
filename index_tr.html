@@ -156,6 +156,66 @@
             from { transform: translateX(100%); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
         }
+        /* ============================
+           ULTRA-PREMIUM LIQUID CURSOR
+        ============================*/
+        * { cursor: none !important; }
+
+        #cursor-dot {
+            position: fixed;
+            top: 0; left: 0;
+            width: 7px; height: 7px;
+            background: #fff;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 100000;
+            transform: translate(-50%, -50%);
+            mix-blend-mode: difference;
+            will-change: transform;
+            transition: width 0.25s cubic-bezier(0.23,1,0.32,1),
+                        height 0.25s cubic-bezier(0.23,1,0.32,1);
+        }
+        #cursor-aura {
+            position: fixed;
+            top: 0; left: 0;
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 99998;
+            transform: translate(-50%, -50%);
+            mix-blend-mode: difference;
+            background: rgba(255,255,255,0.08);
+            border: 1.5px solid rgba(255,255,255,0.25);
+            backdrop-filter: blur(2px);
+            will-change: transform;
+            transition: width 0.45s cubic-bezier(0.23,1,0.32,1),
+                        height 0.45s cubic-bezier(0.23,1,0.32,1),
+                        background 0.3s ease,
+                        border-color 0.3s ease,
+                        box-shadow 0.3s ease;
+        }
+        #cursor-glow {
+            position: fixed;
+            top: 0; left: 0;
+            width: 120px; height: 120px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 99996;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle, rgba(139,92,246,0.18) 0%, rgba(59,130,246,0.08) 50%, transparent 75%);
+            filter: blur(18px);
+            will-change: transform;
+        }
+        #cursor-dot.is-hovering   { width: 12px; height: 12px; }
+        #cursor-aura.is-hovering  {
+            width: 70px; height: 70px;
+            background: rgba(255,255,255,0.04);
+            border-color: rgba(139,92,246,0.85);
+            box-shadow: 0 0 22px rgba(139,92,246,0.55), 0 0 50px rgba(139,92,246,0.2), inset 0 0 18px rgba(59,130,246,0.12);
+        }
+        #cursor-glow.is-hovering  { width: 160px; height: 160px; }
+        #cursor-dot.is-clicking   { width: 5px;  height: 5px;  }
+        #cursor-aura.is-clicking  { width: 36px; height: 36px; }
     </style>
 
     <!-- Three.js Library -->
@@ -163,6 +223,11 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 </head>
 <body class="antialiased selection:bg-purple-500 selection:text-white">
+
+    <!-- LIQUID CURSOR ELEMENTS -->
+    <div id="cursor-glow"></div>
+    <div id="cursor-aura"></div>
+    <div id="cursor-dot"></div>
 
     <!-- Flash Messages -->
     {% with messages = get_flashed_messages() %}
@@ -581,6 +646,76 @@
 
         // Initialize Three.js when DOM is ready
         document.addEventListener('DOMContentLoaded', initThreeJS);
+
+        // ============================================
+        // ULTRA-PREMIUM LIQUID FLUID CURSOR ENGINE
+        // ============================================
+        (() => {
+            const dot   = document.getElementById('cursor-dot');
+            const aura  = document.getElementById('cursor-aura');
+            const glow  = document.getElementById('cursor-glow');
+            if (!dot || !aura || !glow) return;
+
+            let mouseX = window.innerWidth  / 2;
+            let mouseY = window.innerHeight / 2;
+            let auraX = mouseX, auraY = mouseY;
+            let glowX = mouseX, glowY = mouseY;
+
+            const AURA_SPRING = 0.13;
+            const GLOW_SPRING = 0.055;
+
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                dot.style.left = mouseX + 'px';
+                dot.style.top  = mouseY + 'px';
+            });
+
+            const liquidLoop = () => {
+                auraX += (mouseX - auraX) * AURA_SPRING;
+                auraY += (mouseY - auraY) * AURA_SPRING;
+                aura.style.left = auraX + 'px';
+                aura.style.top  = auraY + 'px';
+
+                glowX += (mouseX - glowX) * GLOW_SPRING;
+                glowY += (mouseY - glowY) * GLOW_SPRING;
+                glow.style.left = glowX + 'px';
+                glow.style.top  = glowY + 'px';
+
+                requestAnimationFrame(liquidLoop);
+            };
+            liquidLoop();
+
+            const MAGNETIC_TARGETS = 'a, button, input, textarea, select, label';
+            document.querySelectorAll(MAGNETIC_TARGETS).forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    dot.classList.add('is-hovering');
+                    aura.classList.add('is-hovering');
+                    glow.classList.add('is-hovering');
+                });
+                el.addEventListener('mouseleave', () => {
+                    dot.classList.remove('is-hovering');
+                    aura.classList.remove('is-hovering');
+                    glow.classList.remove('is-hovering');
+                });
+            });
+
+            document.addEventListener('mousedown', () => {
+                dot.classList.add('is-clicking');
+                aura.classList.add('is-clicking');
+            });
+            document.addEventListener('mouseup', () => {
+                dot.classList.remove('is-clicking');
+                aura.classList.remove('is-clicking');
+            });
+
+            document.addEventListener('mouseleave', () => {
+                [dot, aura, glow].forEach(el => el.style.opacity = '0');
+            });
+            document.addEventListener('mouseenter', () => {
+                [dot, aura, glow].forEach(el => el.style.opacity = '1');
+            });
+        })();
     </script>
 </body>
 </html>

@@ -174,13 +174,128 @@
             from { transform: translateX(100%); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
         }
+
+        /* ============================
+           ULTRA-PREMIUM LIQUID CURSOR
+        ============================*/
+        * { cursor: none !important; }
+
+        /* Sharp center dot — snaps instantly */
+        #cursor-dot {
+            position: fixed;
+            top: 0; left: 0;
+            width: 7px; height: 7px;
+            background: #fff;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 100000;
+            transform: translate(-50%, -50%);
+            mix-blend-mode: difference;
+            will-change: transform;
+            transition: width 0.25s cubic-bezier(0.23,1,0.32,1),
+                        height 0.25s cubic-bezier(0.23,1,0.32,1);
+        }
+
+        /* Soft glowing neon aura — trails with spring delay */
+        #cursor-aura {
+            position: fixed;
+            top: 0; left: 0;
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 99998;
+            transform: translate(-50%, -50%);
+            mix-blend-mode: difference;
+            background: rgba(255,255,255,0.08);
+            border: 1.5px solid rgba(255,255,255,0.25);
+            backdrop-filter: blur(2px);
+            will-change: transform;
+            transition: width 0.45s cubic-bezier(0.23,1,0.32,1),
+                        height 0.45s cubic-bezier(0.23,1,0.32,1),
+                        background 0.3s ease,
+                        border-color 0.3s ease,
+                        box-shadow 0.3s ease;
+        }
+
+        /* Larger soft outer glow orb */
+        #cursor-glow {
+            position: fixed;
+            top: 0; left: 0;
+            width: 120px; height: 120px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 99996;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle, rgba(139,92,246,0.18) 0%, rgba(59,130,246,0.08) 50%, transparent 75%);
+            filter: blur(18px);
+            will-change: transform;
+        }
+
+        /* Hovering state — magnetic morph */
+        #cursor-dot.is-hovering {
+            width: 12px; height: 12px;
+        }
+
+        #cursor-aura.is-hovering {
+            width: 70px; height: 70px;
+            background: rgba(255,255,255,0.04);
+            border-color: rgba(139,92,246,0.85);
+            box-shadow: 0 0 22px rgba(139,92,246,0.55), 0 0 50px rgba(139,92,246,0.2), inset 0 0 18px rgba(59,130,246,0.12);
+        }
+
+        #cursor-glow.is-hovering {
+            width: 160px; height: 160px;
+        }
+
+        /* Clicking state */
+        #cursor-dot.is-clicking {
+            width: 5px; height: 5px;
+        }
+        #cursor-aura.is-clicking {
+            width: 36px; height: 36px;
+        }
+
+        /* ============================
+           TILT CARD SHEEN OVERLAY
+        ============================*/
+        .tilt-card {
+            transform-style: preserve-3d;
+            position: relative;
+        }
+        .tilt-card .card-inner {
+            transform-style: preserve-3d;
+        }
+        .tilt-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: radial-gradient(circle at var(--x, 50%) var(--y, 50%),
+                rgba(139, 92, 246, 0.12) 0%,
+                rgba(59, 130, 246, 0.05) 40%,
+                transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            z-index: 2;
+        }
+        .tilt-card:hover::after {
+            opacity: 1;
+        }
     </style>
 
     <!-- Three.js Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <!-- Vanilla Tilt -->
+    <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.8.1/dist/vanilla-tilt.min.js"></script>
 </head>
 <body class="antialiased selection:bg-purple-500 selection:text-white">
+
+    <!-- LIQUID CURSOR ELEMENTS -->
+    <div id="cursor-glow"></div>
+    <div id="cursor-aura"></div>
+    <div id="cursor-dot"></div>
 
     <!-- Flash Messages -->
     {% with messages = get_flashed_messages() %}
@@ -282,7 +397,7 @@
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                 
                 <!-- Service 1 -->
-                <div class="glass-card p-8 rounded-2xl reveal group">
+                <div class="glass-card tilt-card p-8 rounded-2xl reveal group" data-tilt data-tilt-max="12" data-tilt-speed="400" data-tilt-glare="true" data-tilt-max-glare="0.15" data-tilt-scale="1.03">
                     <div class="w-14 h-14 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-400 text-2xl mb-6 group-hover:bg-purple-500 group-hover:text-white transition-all duration-300">
                         <i class="fas fa-layer-group"></i>
                     </div>
@@ -293,7 +408,7 @@
                 </div>
 
                 <!-- Service 2 -->
-                <div class="glass-card p-8 rounded-2xl reveal group" style="transition-delay: 100ms;">
+                <div class="glass-card tilt-card p-8 rounded-2xl reveal group" style="transition-delay: 100ms;" data-tilt data-tilt-max="12" data-tilt-speed="400" data-tilt-glare="true" data-tilt-max-glare="0.15" data-tilt-scale="1.03">
                     <div class="w-14 h-14 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 text-2xl mb-6 group-hover:bg-blue-500 group-hover:text-white transition-all duration-300">
                         <i class="fas fa-mobile-alt"></i>
                     </div>
@@ -304,7 +419,7 @@
                 </div>
 
                 <!-- Service 3 -->
-                <div class="glass-card p-8 rounded-2xl reveal group" style="transition-delay: 200ms;">
+                <div class="glass-card tilt-card p-8 rounded-2xl reveal group" style="transition-delay: 200ms;" data-tilt data-tilt-max="12" data-tilt-speed="400" data-tilt-glare="true" data-tilt-max-glare="0.15" data-tilt-scale="1.03">
                     <div class="w-14 h-14 rounded-xl bg-fuchsia-500/10 flex items-center justify-center text-fuchsia-400 text-2xl mb-6 group-hover:bg-fuchsia-500 group-hover:text-white transition-all duration-300">
                         <i class="fas fa-search"></i>
                     </div>
@@ -315,7 +430,7 @@
                 </div>
 
                 <!-- Service 4 -->
-                <div class="glass-card p-8 rounded-2xl reveal group" style="transition-delay: 300ms;">
+                <div class="glass-card tilt-card p-8 rounded-2xl reveal group" style="transition-delay: 300ms;" data-tilt data-tilt-max="12" data-tilt-speed="400" data-tilt-glare="true" data-tilt-max-glare="0.15" data-tilt-scale="1.03">
                     <div class="w-14 h-14 rounded-xl bg-cyan-500/10 flex items-center justify-center text-cyan-400 text-2xl mb-6 group-hover:bg-cyan-500 group-hover:text-white transition-all duration-300">
                         <i class="fas fa-fingerprint"></i>
                     </div>
@@ -601,6 +716,88 @@
 
         // Initialize Three.js when DOM is ready
         document.addEventListener('DOMContentLoaded', initThreeJS);
+
+        // ============================================
+        // ULTRA-PREMIUM LIQUID FLUID CURSOR ENGINE
+        // ============================================
+        (() => {
+            const dot   = document.getElementById('cursor-dot');
+            const aura  = document.getElementById('cursor-aura');
+            const glow  = document.getElementById('cursor-glow');
+            if (!dot || !aura || !glow) return;
+
+            // Current real mouse position
+            let mouseX = window.innerWidth  / 2;
+            let mouseY = window.innerHeight / 2;
+
+            // Spring positions for aura and glow (lag behind mouse)
+            let auraX = mouseX, auraY = mouseY;
+            let glowX = mouseX, glowY = mouseY;
+
+            // Spring physics configuration
+            const AURA_SPRING = 0.13; // snappier
+            const GLOW_SPRING = 0.055; // lazier
+
+            // Track raw position — dot follows instantly
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                dot.style.left = mouseX + 'px';
+                dot.style.top  = mouseY + 'px';
+            });
+
+            // Single rAF loop drives both spring followers
+            const liquidLoop = () => {
+                // Spring-interpolate aura
+                auraX += (mouseX - auraX) * AURA_SPRING;
+                auraY += (mouseY - auraY) * AURA_SPRING;
+                aura.style.left = auraX + 'px';
+                aura.style.top  = auraY + 'px';
+
+                // Spring-interpolate outer glow (slower)
+                glowX += (mouseX - glowX) * GLOW_SPRING;
+                glowY += (mouseY - glowY) * GLOW_SPRING;
+                glow.style.left = glowX + 'px';
+                glow.style.top  = glowY + 'px';
+
+                requestAnimationFrame(liquidLoop);
+            };
+            liquidLoop();
+
+            // ── Magnetic snap / morph on interactive elements ──
+            const MAGNETIC_TARGETS = 'a, button, input, textarea, select, label, [data-tilt]';
+
+            document.querySelectorAll(MAGNETIC_TARGETS).forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    dot.classList.add('is-hovering');
+                    aura.classList.add('is-hovering');
+                    glow.classList.add('is-hovering');
+                });
+                el.addEventListener('mouseleave', () => {
+                    dot.classList.remove('is-hovering');
+                    aura.classList.remove('is-hovering');
+                    glow.classList.remove('is-hovering');
+                });
+            });
+
+            // ── Click feedback pulse ──
+            document.addEventListener('mousedown', () => {
+                dot.classList.add('is-clicking');
+                aura.classList.add('is-clicking');
+            });
+            document.addEventListener('mouseup', () => {
+                dot.classList.remove('is-clicking');
+                aura.classList.remove('is-clicking');
+            });
+
+            // ── Fade out when pointer leaves viewport ──
+            document.addEventListener('mouseleave', () => {
+                [dot, aura, glow].forEach(el => el.style.opacity = '0');
+            });
+            document.addEventListener('mouseenter', () => {
+                [dot, aura, glow].forEach(el => el.style.opacity = '1');
+            });
+        })();
     </script>
 </body>
 </html>
