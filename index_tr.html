@@ -324,6 +324,31 @@
                         class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-purple-500 transition-colors placeholder-gray-600" placeholder="ornek@email.com">
                 </div>
                 <div>
+                    <label for="phone" class="block text-sm font-medium text-gray-400 mb-2">Telefon Numarası</label>
+                    <input type="tel" id="phone" name="phone" required 
+                        class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-purple-500 transition-colors placeholder-gray-600" placeholder="Telefon Numaranız">
+                </div>
+                <div>
+                    <label for="company" class="block text-sm font-medium text-gray-400 mb-2">Şirket / Klinik Adı</label>
+                    <input type="text" id="company" name="company" required 
+                        class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-purple-500 transition-colors placeholder-gray-600" placeholder="Şirketiniz veya Kliniğiniz">
+                </div>
+                <div class="relative">
+                    <label for="budget" class="block text-sm font-medium text-gray-400 mb-2">Proje Bütçesi</label>
+                    <div class="relative">
+                        <select id="budget" name="budget" required
+                            class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-purple-500 transition-colors appearance-none cursor-pointer">
+                            <option value="" disabled selected class="bg-[#050505] text-gray-400">Tahmini Bütçe Seçin</option>
+                            <option value="$500 - $1,000" class="bg-[#050505] text-white">$500 - $1,000</option>
+                            <option value="$1,000 - $2,500" class="bg-[#050505] text-white">$1,000 - $2,500</option>
+                            <option value="$2,500+" class="bg-[#050505] text-white">$2,500+</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 bottom-0 top-0 flex items-center px-4 text-gray-400">
+                            <i class="fas fa-chevron-down text-sm"></i>
+                        </div>
+                    </div>
+                </div>
+                <div>
                     <label for="message" class="block text-sm font-medium text-gray-400 mb-2">Mesaj</label>
                     <textarea id="message" name="message" rows="4" required 
                         class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-purple-500 transition-colors placeholder-gray-600" placeholder="Projenizden bahsedin..."></textarea>
