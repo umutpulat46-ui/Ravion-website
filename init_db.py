@@ -4,12 +4,18 @@ def init_db():
     conn = sqlite3.connect('agency.db')
     c = conn.cursor()
     
-    # Create messages table (keep existing)
+    # Drop existing messages table to recreate with new schema
+    c.execute('DROP TABLE IF EXISTS messages')
+
+    # Create messages table
     c.execute('''
-        CREATE TABLE IF NOT EXISTS messages (
+        CREATE TABLE messages (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL,
             email TEXT NOT NULL,
+            phone TEXT,
+            company TEXT,
+            budget TEXT,
             message TEXT NOT NULL,
             timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
         )

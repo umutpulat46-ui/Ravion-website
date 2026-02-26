@@ -66,18 +66,24 @@ def index_tr():
 def send_message():
     name = request.form.get('name')
     email = request.form.get('email')
+    phone = request.form.get('phone')
+    company = request.form.get('company')
+    budget = request.form.get('budget')
     message = request.form.get('message')
     
     # Insert into DB
     db = get_db()
-    db.execute('INSERT INTO messages (name, email, message) VALUES (?, ?, ?)',
-               (name, email, message))
+    db.execute('INSERT INTO messages (name, email, phone, company, budget, message) VALUES (?, ?, ?, ?, ?, ?)',
+               (name, email, phone, company, budget, message))
     db.commit()
     
     # Print to terminal as requested
     print(f"\n--- NEW MESSAGE SAVED ---")
     print(f"Name: {name}")
     print(f"Email: {email}")
+    print(f"Phone: {phone}")
+    print(f"Company: {company}")
+    print(f"Budget: {budget}")
     print(f"Message: {message}")
     print(f"-------------------------\n")
     
@@ -309,6 +315,9 @@ if __name__ == '__main__':
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     name TEXT NOT NULL,
                     email TEXT NOT NULL,
+                    phone TEXT,
+                    company TEXT,
+                    budget TEXT,
                     message TEXT NOT NULL,
                     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
                 )

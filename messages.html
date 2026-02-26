@@ -238,7 +238,8 @@
                             <tr>
                                 <th class="px-6 py-4">ID</th>
                                 <th class="px-6 py-4">Sender</th>
-                                <th class="px-6 py-4">Email</th>
+                                <th class="px-6 py-4">Contact Info</th>
+                                <th class="px-6 py-4">Project Details</th>
                                 <th class="px-6 py-4">Message</th>
                                 <th class="px-6 py-4 text-right">Date</th>
                                 <th class="px-6 py-4 text-right">Actions</th>
@@ -257,7 +258,12 @@
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 text-gray-300">
-                                    <a href="mailto:{{ msg['email'] }}" class="hover:text-purple-400 transition-colors">{{ msg['email'] }}</a>
+                                    <a href="mailto:{{ msg['email'] }}" class="hover:text-purple-400 transition-colors block">{{ msg['email'] }}</a>
+                                    <a href="tel:{{ msg['phone'] }}" class="hover:text-purple-400 text-xs transition-colors block mt-1">{{ msg['phone'] }}</a>
+                                </td>
+                                <td class="px-6 py-4 text-gray-300">
+                                    <div class="text-sm font-medium text-white">{{ msg['company'] }}</div>
+                                    <div class="text-xs text-emerald-400 mt-1">{{ msg['budget'] }}</div>
                                 </td>
                                 <td class="px-6 py-4 max-w-md truncate text-gray-400">{{ msg['message'] }}</td>
                                 <td class="px-6 py-4 text-right text-xs text-gray-500 font-mono">{{ msg['timestamp'] }}</td>
@@ -269,7 +275,7 @@
                             </tr>
                             {% else %}
                             <tr>
-                                <td colspan="5" class="px-6 py-12 text-center text-gray-500">
+                                <td colspan="7" class="px-6 py-12 text-center text-gray-500">
                                     <i class="fas fa-inbox text-4xl mb-3 opacity-20 block"></i>
                                     No messages found.
                                 </td>

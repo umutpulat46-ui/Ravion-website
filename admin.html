@@ -328,8 +328,9 @@
                     <table class="w-full text-left text-sm text-gray-400">
                         <thead class="bg-white/5 text-gray-200 uppercase text-xs font-semibold">
                             <tr>
-                                <th class="px-6 py-4">Name</th>
-                                <th class="px-6 py-4">Email</th>
+                                <th class="px-6 py-4">Sender</th>
+                                <th class="px-6 py-4">Contact & Company</th>
+                                <th class="px-6 py-4">Budget</th>
                                 <th class="px-6 py-4">Message</th>
                                 <th class="px-6 py-4 text-right">Action</th>
                             </tr>
@@ -347,7 +348,12 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4">{{ msg['email'] }}</td>
+                                <td class="px-6 py-4">
+                                    <div class="text-sm text-gray-300">{{ msg['email'] }}</div>
+                                    <div class="text-xs text-gray-500">{{ msg['phone'] }}</div>
+                                    <div class="text-xs text-purple-400 mt-1">{{ msg['company'] }}</div>
+                                </td>
+                                <td class="px-6 py-4 text-emerald-400 font-medium">{{ msg['budget'] }}</td>
                                 <td class="px-6 py-4 truncate max-w-xs">{{ msg['message'] }}</td>
                                 <td class="px-6 py-4 text-right">
                                     <a href="/delete_message/{{ msg['id'] }}" onclick="return confirm('Are you sure?')" class="text-xs bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white px-3 py-1 rounded-full transition-all">
@@ -357,7 +363,7 @@
                             </tr>
                             {% else %}
                             <tr>
-                                <td colspan="4" class="px-6 py-8 text-center text-gray-500">No messages yet.</td>
+                                <td colspan="5" class="px-6 py-8 text-center text-gray-500">No messages yet.</td>
                             </tr>
                             {% endfor %}
                         </tbody>
